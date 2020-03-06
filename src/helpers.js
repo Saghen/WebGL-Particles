@@ -37,9 +37,65 @@ function createProgram(gl, vertexShader, fragmentShader) {
 function randomNumberOutsideRange(start, end, maxRange) {
   const size = end - start;
   const offset = (start + end) / 2 - size / 2;
-  return ((Math.random() >= 0.5) * 2 - 1) * (size / 2 + Math.random() * maxRange) + size / 2 + offset;
+  return (
+    ((Math.random() >= 0.5) * 2 - 1) * (size / 2 + Math.random() * maxRange) +
+    size / 2 +
+    offset
+  );
 }
 
 function randomNumberInRange(start, end) {
   return Math.random() * (end - start) + start;
 }
+
+function initCanvas(selector) {
+  const canvas = document.querySelector(selector);
+  const gl = canvas.getContext("webgl2", { premultipliedAlpha: false, alpha: true });
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+  const vertexShaderSource = document
+    .querySelector("#vertex-shader")
+    .text.trim();
+  const fragmentShaderSource = document
+    .querySelector("#fragment-shader")
+    .text.trim();
+
+  const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
+  const fragmentShader = createShader(
+    gl,
+    gl.FRAGMENT_SHADER,
+    fragmentShaderSource
+  );
+
+  const program = createProgram(gl, vertexShader, fragmentShader);
+
+  return [gl, program];
+}
+
+function addAttribute(
+  gl,
+  buffer,
+  data,
+  location,
+  {
+    size = 2,
+    type = gl.FLOAT,
+    usage = gl.DYNAMIC_DRAW,
+    target = gl.ARRAY_BUFFER
+  } = {}
+) {
+  gl.bindBuffer(target, buffer);
+  gl.bufferData(target, data, usage);
+  gl.enableVertexAttribArray(location);
+  gl.vertexAttribPointer(location, size, type, false, 0, 0);
+}
+
+export {
+  resize,
+  createShader,
+  randomNumberOutsideRange,
+  randomNumberInRange,
+  initCanvas,
+  addAttribute
+};
