@@ -10,6 +10,8 @@ const [gl, program] = initCanvas("canvas");
 const screenSizeLocation = gl.getUniformLocation(program, "u_screenSize");
 const timeUniformLocation = gl.getUniformLocation(program, "u_time");
 
+const sizeUniformLocation = gl.getUniformLocation(program, "u_size");
+
 const { positions, normals, times } = initialization.run(
   {},
   gl,
@@ -86,6 +88,7 @@ function drawScene(time) {
 
   gl.uniform2f(screenSizeLocation, width, height);
   gl.uniform1f(timeUniformLocation, time);
+  gl.uniform1f(sizeUniformLocation, config.size);
 
   gl.drawArrays(gl.POINTS, 0, count);
 
