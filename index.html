@@ -1,0 +1,57 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /* remove the border */
+      body {
+        border: 0;
+        margin: 0;
+      }
+      /* make the canvas the size of the viewport */
+      canvas {
+        width: 100vw;
+        height: 100vh;
+        display: block;
+        background-color: #1b1d24;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas></canvas>
+    <script src="./helpers.js"></script>
+    <script src="./particles.js"></script>
+    <script id="vertex-shader" type="x-shader/x-vertex">
+      #version 300 es
+
+      // an attribute is an input (in) to a vertex shader.
+      // It will receive data from a buffer
+      in vec2 position;
+      in vec2 normal;
+      in float time;
+      uniform vec2 u_screenSize;
+      uniform float u_time;
+
+      // all shaders have a main function
+      void main() {
+        vec2 newPosition = position + normal * (u_time - time);
+        vec2 clipSpace = newPosition / u_screenSize * 2.0 - 1.0;
+        gl_Position = vec4(clipSpace, 0.0, 1.0);
+        gl_PointSize = 4.0;
+      }
+    </script>
+    <script id="fragment-shader" type="x-shader/x-fragment">
+      #version 300 es
+
+      precision mediump float;
+
+      out vec4 outColor;
+
+      void main() {
+        outColor = vec4(1,1,1,1);
+      }
+    </script>
+    <script src="./index.js"></script>
+  </body>
+</html>
