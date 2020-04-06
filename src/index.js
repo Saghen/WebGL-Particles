@@ -31,7 +31,7 @@ function drawScene(time) {
   let particleTime = 0;
 
   if (particleIndex >= config.count) particleIndex = 0;
-  for (let i = 0; i < updatesPerFrame; i++) {
+  for (let i = 0; i < updatesPerFrame - 1; i++) {
     const index = particleIndex * 2;
     particleTime = times.data[particleIndex];
     const x =

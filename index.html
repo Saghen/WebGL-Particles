@@ -38,20 +38,26 @@
       out float opacity;
       out vec2 vertexPosition;
 
-      float rand(vec2 co)
-      {
-        return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+      vec2 calculatePositionInPixels() {
+        return position + normal * (u_time - time);
+      }
+      vec4 pixelsToClipSpace() {
+        return vec4(vertexPosition / u_screenSize * 2.0 - 1.0, gl_Position.y, gl_Position.w);
+      }
+      float varyingOpacity() {
+        float newOpacity = mod(initialOpacity + u_time / 10000.0, 2.0);
+        if (newOpacity > 1.0) newOpacity = 2.0 - newOpacity;
+        return newOpacity;
       }
 
       void main() {
-        vec2 newPosition = position + normal * (u_time - time);
-        vec2 clipSpace = newPosition / u_screenSize * 2.0 - 1.0;
-        gl_Position = vec4(clipSpace, 0, 1.0);
+        gl_Position = vec4(0, 0, 0, 1.0);
         gl_PointSize = u_size * 2.0;
 
-        opacity = mod(initialOpacity + u_time / 10000.0, 2.0);
-        if (opacity > 1.0) opacity = 2.0 - opacity;
-        vertexPosition = newPosition;
+        vertexPosition = calculatePositionInPixels();
+        gl_Position = pixelsToClipSpace();
+
+        opacity = varyingOpacity();
       }
     </script>
     <script id="fragment-shader" type="x-shader/x-fragment">
