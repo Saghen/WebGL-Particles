@@ -81,7 +81,7 @@
         float r = distance(gl_FragCoord.xy, vertexPosition);
         float delta = fwidth(r);
 
-        float alpha = 1.0 - smoothstep(u_size - 1.0 - delta, u_size - 1.0 + delta, r);
+        float alpha = 1.0 - smoothstep(u_size - 1.0 - delta, u_size - 1.0, r);
         outColor = vec4(1,1,1, alpha * opacity);
       }
     </script>
