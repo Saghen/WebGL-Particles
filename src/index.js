@@ -40,6 +40,5 @@ function drawScene(time) {
 
   gl.drawArrays(gl.POINTS, 0, config.count);
 
-  particleIndex++;
   requestAnimationFrame(drawScene);
 }
