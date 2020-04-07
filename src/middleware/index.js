@@ -1,11 +1,15 @@
 import Middleware from "./middleware";
 
 import initializationMiddleware from "./initialization";
+import updateParticlesMiddleware from './update-particle';
 
 const initialization = new Middleware();
 initializationMiddleware.forEach(initialization.use);
 
-const updateParticle = new Middleware();
+const updateParticles = new Middleware();
+updateParticlesMiddleware.middleware.forEach(updateParticles.use);
+updateParticlesMiddleware.afterMiddleware.forEach(updateParticles.useAfter);
+
 const generateShaders = new Middleware();
 
-export { initialization, updateParticle, generateShaders };
+export { initialization, updateParticles, generateShaders };
