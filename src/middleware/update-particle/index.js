@@ -1,10 +1,8 @@
 import { detectOutOfRange } from "./detectOutOfRange";
-import { generateParticles } from "./generateParticles";
+import { regenerateMarkedParticles } from "./regenerateMarkedParticles";
 import { updateBuffers } from "./updateBuffers";
 
 export default {
-  middleware: [
-  detectOutOfRange,
-  generateParticles,],
-  afterMiddleware: [updateBuffers]
-}
+  middleware: [detectOutOfRange, regenerateMarkedParticles],
+  afterMiddleware: [updateBuffers],
+};

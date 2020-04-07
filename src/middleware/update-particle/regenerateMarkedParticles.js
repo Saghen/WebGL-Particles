@@ -1,6 +1,6 @@
 import { generateParticle } from "../../particles";
 
-function generateParticles(props, gl, options) {
+function regenerateMarkedParticles(props, gl, options) {
   let { marking, generating, positions, normals, times, time } = props;
 
   // Figure out where to start if this is our first time generating particles
@@ -51,4 +51,4 @@ function generateParticles(props, gl, options) {
   if (!props.aborted) props.wasGenerating = false;
 }
 
-export { generateParticles };
+export { regenerateMarkedParticles };
