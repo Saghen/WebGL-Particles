@@ -13,21 +13,20 @@ const props = initialization.run({}, gl, program, config);
 
 requestAnimationFrame(drawScene);
 
+let updatingProps = {
+  ...props,
+  marking: { index: 0, count: 0, marked: new Array(config.count).fill(false) },
+  generating: { index: 0, count: 0 },
+};
+
 function drawScene(time) {
   const width = gl.canvas.width;
   const height = gl.canvas.height;
   resize(gl.canvas);
   gl.viewport(0, 0, width, height);
 
-  updateParticles.run(
-    {
-      ...props,
-      marking: { index: 0, count: 0, marked: [] },
-      generating: { index: 0, count: 0 },
-      time,
-      width,
-      height,
-    },
+  updatingProps = updateParticles.run(
+    { ...updatingProps, time, width, height },
     gl,
     config
   );

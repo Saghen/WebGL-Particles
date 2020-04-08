@@ -4,22 +4,23 @@ function detectOutOfRange(props, gl, options) {
   // If we haven't finished generating, then skip to generating
   if (marking.wasMarking && generating.index !== marking.index) return;
 
-  let markingIndex = marking.index;
   marking.count = 0;
   marking.wasMarking = true;
   // Avoid long GC due to tens of thousands of variables
-  let index, x, y, particleTime;
+  let index, x, y, normalX, normalY, particleTime;
 
-  if (markingIndex >= options.count) markingIndex = 0;
+  if (marking.index >= options.count) marking.index = 0;
   for (let i = options.updatesPerFrame - 1; i; i--) {
-    if (markingIndex >= options.count) markingIndex = 0;
+    if (marking.index >= options.count) marking.index = 0;
     if (props.aborted) break;
-    index = markingIndex * 2;
-    particleTime = times.data[markingIndex];
-    x = positions.data[index] + normals.data[index] * (time - particleTime);
-    y =
-      positions.data[index + 1] +
-      normals.data[index + 1] * (time - particleTime);
+    index = marking.index * 2;
+
+    normalX = normals.data[index];
+    normalY = normals.data[index + 1];
+    particleTime = times.data[marking.index];
+
+    x = positions.data[index] + normalX * (time - particleTime);
+    y = positions.data[index + 1] + normalY * (time - particleTime);
 
     // Avoids setting the array unless absolutely necessary yielding a 3-4x performance uplift
     if (
@@ -28,14 +29,13 @@ function detectOutOfRange(props, gl, options) {
       ((y > props.height + options.size || y < -options.size) &&
         Math.sign(y) === Math.sign(normals.data[index + 1]))
     )
-      marking.marked[markingIndex] = true;
+      marking.marked[marking.index] = true;
 
-    markingIndex++;
+    marking.index++;
     marking.count++;
   }
 
   if (!props.aborted) marking.wasMarking = false;
-  marking.index = markingIndex;
 }
 
 export { detectOutOfRange };

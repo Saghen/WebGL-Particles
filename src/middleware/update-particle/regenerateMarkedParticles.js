@@ -10,13 +10,10 @@ function regenerateMarkedParticles(props, gl, options) {
       generating.index = options.count + generating.index;
   }
 
-  if (generating.wasGenerating) console.log('Generating again')
-
   let toGenerate;
   if (generating.index > marking.index)
     toGenerate = options.count - generating.index + marking.index;
-  else
-    toGenerate = marking.index - generating.index + 1
+  else toGenerate = marking.index - generating.index + 1;
   generating.count = 0;
 
   let index;
@@ -28,6 +25,8 @@ function regenerateMarkedParticles(props, gl, options) {
       generating.count++;
       continue;
     }
+
+    marking.marked[generating.index] = false;
 
     index = generating.index * 2;
     const particle = generateParticle(
